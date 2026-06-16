@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>do the hard thing — accountability sessions with Ellie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#E7EAE1;
+    --card:#F5F7EF;
+    --ink:#232A33;
+    --ink-soft:#5A6470;
+    --marker:#E7A33A;
+    --done:#5E8268;
+    --rule:#D3D7C9;
+    --max:600px;
+    --note:220px;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:"IBM Plex Sans",system-ui,sans-serif;
+    font-size:18px;
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;}
+  .wrap{
+    max-width:880px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+  .row{
+    max-width:640px;
+    margin:0 auto;
+  }
+  .col{min-width:0;}
+
+  /* type */
+  h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:500;letter-spacing:-0.01em;}
+  .eyebrow{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.72rem;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin:0 0 18px;
+  }
+  .mono{font-family:"IBM Plex Mono",monospace;}
+
+  /* header */
+  header.site{padding:30px 0 10px;}
+  .wordmark{
+    font-family:"Fraunces",serif;
+    font-size:1.15rem;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  .wordmark span{color:var(--ink-soft);font-weight:400;}
+
+  /* hero */
+  .hero{padding:54px 0 70px;}
+  .hero h1{
+    font-size:clamp(2.5rem,7vw,4rem);
+    line-height:1.06;
+    margin:0 0 38px;
+  }
+  .hero p.lead{font-size:1.15rem;margin:0 0 34px;max-width:34ch;color:#333a42;}
+
+  .page-card{
+    background:var(--card);
+    border:1px solid var(--rule);
+    border-radius:3px;
+    box-shadow:0 1px 0 var(--rule),0 14px 30px -22px rgba(35,42,51,.5);
+    padding:26px 28px;
+    margin:0 0 34px;
+    max-width:430px;
+  }
+  .page-card .label{
+    font-family:"IBM Plex Mono",monospace;
+    font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-soft);margin-bottom:14px;
+  }
+  .todo{
+    font-family:"Caveat",cursive;
+    font-size:1.85rem;line-height:1.2;
+    display:block;
+  }
+  .todo .task{
+    position:relative;display:inline-block;padding:0 4px;
+  }
+  .todo .swipe{
+    position:absolute;left:-2px;top:34%;height:62%;width:calc(100% + 4px);
+    background:var(--marker);opacity:.42;border-radius:2px;
+    transform-origin:left center;transform:scaleX(0);
+    animation:swipe .7s cubic-bezier(.6,.04,.4,1) .5s forwards;
+    z-index:-1;
+  }
+  .todo .tick{
+    display:block;margin-top:16px;color:var(--done);
+    font-family:"IBM Plex Sans";font-weight:500;
+    font-size:1.05rem;opacity:0;animation:fadein .4s ease 1.25s forwards;
+  }
+  @keyframes swipe{to{transform:scaleX(1);}}
+  @keyframes fadein{to{opacity:1;}}
+
+  /* buttons */
+  .btn{
+    display:inline-block;
+    font-family:"IBM Plex Sans";font-weight:500;font-size:1rem;
+    background:var(--ink);color:var(--paper);
+    padding:14px 26px;border-radius:2px;text-decoration:none;
+    border:1px solid var(--ink);
+    transition:transform .12s ease,background .15s ease;
+  }
+  .btn:hover{background:#11171e;transform:translateY(-1px);}
+  .btn.ghost{background:transparent;color:var(--ink);border-color:var(--ink);}
+  .btn.ghost:hover{background:rgba(35,42,51,.06);}
+  a:focus-visible,.btn:focus-visible{outline:2.5px solid var(--marker);outline-offset:3px;}
+
+  /* sections */
+  section{padding:46px 0;border-top:1px solid var(--rule);}
+  section h2{font-size:clamp(1.7rem,4.2vw,2.3rem);line-height:1.08;margin:0 0 22px;max-width:20ch;}
+  section p{margin:0 0 16px;color:#2c333b;}
+  .big-quote{font-size:1.05rem;}
+  .term{font-style:italic;border-bottom:1.5px dotted var(--marker);}
+  .kicker{font-family:"Fraunces",serif;font-style:italic;font-size:1.25rem;line-height:1.35;color:var(--ink);margin:26px 0 0;}
+  ul.wins{list-style:none;margin:20px 0 0;padding:0;}
+  ul.wins li{position:relative;padding:9px 0 9px 28px;border-top:1px solid var(--rule);font-size:1rem;}
+  ul.wins li:first-child{border-top:none;}
+  ul.wins li::before{content:"✓";position:absolute;left:2px;top:9px;color:var(--done);font-weight:600;}
+
+  /* steps */
+  ol.steps{list-style:none;margin:0;padding:0;}
+  ol.steps li{
+    display:grid;grid-template-columns:78px 1fr;column-gap:18px;
+    padding:18px 0;border-top:1px solid var(--rule);
+  }
+  ol.steps li:first-child{border-top:none;}
+  ol.steps .time{
+    font-family:"IBM Plex Mono",monospace;font-size:.78rem;
+    color:var(--ink-soft);padding-top:5px;letter-spacing:.02em;
+  }
+  ol.steps h3{font-size:1.12rem;margin:0 0 5px;font-weight:600;}
+  ol.steps p{margin:0;font-size:.97rem;}
+
+  /* pricing */
+  .tiers{display:grid;gap:16px;}
+  .tier{
+    background:var(--card);border:1px solid var(--rule);border-radius:3px;
+    padding:22px 24px;
+    display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px 20px;
+  }
+  .tier .meta{min-width:0;}
+  .tier .name{font-family:"Fraunces",serif;font-size:1.3rem;font-weight:500;margin:0 0 2px;}
+  .tier .desc{font-size:.95rem;color:var(--ink-soft);margin:0;}
+  .tier .price{
+    font-family:"IBM Plex Mono",monospace;font-size:.95rem;color:var(--ink-soft);
+    white-space:nowrap;
+  }
+  .tier .price b{color:var(--ink);font-weight:500;font-size:1.15rem;}
+  .tier .act{grid-column:1 / -1;}
+  .tier.free{border-color:var(--ink);}
+  .subsidy{
+    margin-top:18px;font-size:.92rem;color:var(--ink-soft);
+    border-left:2px solid var(--done);padding-left:14px;
+  }
+
+  /* testimonials */
+  .quotes{display:grid;gap:22px;}
+  .quote{font-size:1.08rem;}
+  .quote p{font-family:"Fraunces",serif;font-style:italic;margin:0 0 7px;color:var(--ink);}
+  .quote cite{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);}
+
+  /* final + footer */
+  .final{text-align:left;}
+  .final h2{font-size:clamp(1.9rem,5vw,2.6rem);}
+  footer.site{
+    border-top:1px solid var(--rule);padding:34px 0 50px;
+    font-size:.85rem;color:var(--ink-soft);
+  }
+  footer.site .wordmark{font-size:1rem;display:block;margin-bottom:8px;}
+
+  @media (max-width:760px){
+    body{font-size:17px;}
+    .tier{grid-template-columns:1fr;}
+    .tier .price{text-align:left;}
+    ol.steps li{grid-template-columns:64px 1fr;column-gap:12px;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .todo .swipe{animation:none;transform:scaleX(1);}
+    .todo .tick{animation:none;opacity:1;}
+    .btn{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="site">
+    <div class="wordmark">do the hard thing <span>/ with Ellie</span></div>
+  </header>
+
+  <div class="hero row">
+    <div class="col">
+      <h1>Let's do the thing you've been avoiding.</h1>
+      <div class="page-card" aria-label="example to-do">
+        <div class="label">your list, today</div>
+        <span class="todo"><span class="task">submit my expense reimbursements<span class="swipe" aria-hidden="true"></span></span><span class="tick" aria-hidden="true">✓ done</span></span>
+      </div>
+      <p class="lead">Live, one-to-one accountability sessions for AI safety &amp; EA people. You bring the application, the grant report, the half-written paper, the expenses pile you'd rather not think about. We sit down together and get it done.</p>
+      <a class="btn" href="https://cal.com/your-cal-username/intro" data-cal-link="your-cal-username/intro" data-cal-config='{"layout":"month_view"}'>Book a free 25-min intro →</a>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="wrap row">
+    <div class="col">
+      <p class="eyebrow">sound familiar</p>
+      <h2>You know that hard thing…</h2>
+      <p class="big-quote">The alarm goes at seven, you're still horizontal at ten, and the day's gone before it started. The email that's been sitting unread for nine days. The form open in a tab since Tuesday. The grant report you keep almost starting.</p>
+      <p class="big-quote">It's not that you <em>can't</em>, it's that the thing has grown an <span class="term">ugh field</span>, and now even glancing at it makes you flinch. Doing it alone, right now, feels impossible, and the dread compounds every day you don't.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap row">
+    <div class="col">
+      <p class="eyebrow">what actually happens</p>
+      <h2>A 95-minute session, roughly.</h2>
+      <ol class="steps">
+        <li>
+          <div class="time">0&ndash;5 min</div>
+          <div>
+            <h3>Pick the one thing</h3>
+            <p>We name it concretely. Not "work on applications," but "submit the form that's been open since Tuesday."</p>
+          </div>
+        </li>
+        <li>
+          <div class="time">5&ndash;10 min</div>
+          <div>
+            <h3>Find the first move</h3>
+            <p>We decide what "done for today" looks like and agree on your very first action, so you can't hide behind vagueness.</p>
+          </div>
+        </li>
+        <li>
+          <div class="time">10&ndash;90 min</div>
+          <div>
+            <h3>Do it, with me here</h3>
+            <p>One long push, or two sprints with a break. I keep you on task and check in so you don't freeze: "read me the sentence you're stuck on," or "write the ugly version first."</p>
+          </div>
+        </li>
+        <li>
+          <div class="time">90&ndash;95 min</div>
+          <div>
+            <h3>Wrap up</h3>
+            <p>We note what got done, celebrate your little win, and set the next step so the momentum carries. If you want, we book the next session, or talk about how to not get stuck on this one again.</p>
+          </div>
+        </li>
+      </ol>
+      <p class="kicker">I prod. I nag a little. Mostly I make sure the thing gets done.</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap row">
+    <div class="col">
+      <p class="eyebrow">what people actually leave with</p>
+      <h2>Call it accountability, if you like.</h2>
+      <p>Tools like Focusmate are great, but they only keep you company. I make sure you actually do the thing, and I can usually tell when you're stuck on the task or stuck on the fear underneath it. So far that's meant helping people:</p>
+      <ul class="wins">
+        <li>get their sleep schedule back under control</li>
+        <li>finally commit to ordering the hair-loss treatment they kept putting off (the foam was never getting used)</li>
+        <li>buy shoes that weren't falling apart, and socks that actually match</li>
+        <li>message the girl, with an actual date idea (not just "hey")</li>
+        <li>cancel the subscriptions they weren't using and divert the money to charity</li>
+        <li>claim back over £25,000 in expenses and unpaid salary</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap row">
+    <div class="col">
+      <p class="eyebrow">sessions</p>
+      <h2>Pick a length.</h2>
+      <div class="tiers">
+        <div class="tier free">
+          <div class="meta">
+            <p class="name">Intro</p>
+            <p class="desc">Tell me about yourself. Tell me the thing(s) you're avoiding. We'll see if this helps.</p>
+          </div>
+          <div class="price"><b>Free</b> · 25 min</div>
+          <a class="btn act" href="https://cal.com/your-cal-username/intro" data-cal-link="your-cal-username/intro" data-cal-config='{"layout":"month_view"}'>Book the free intro →</a>
+        </div>
+        <div class="tier">
+          <div class="meta">
+            <p class="name">Short</p>
+            <p class="desc">One small dreaded thing, knocked out.</p>
+          </div>
+          <div class="price"><b>£50</b> · 45 min</div>
+          <a class="btn ghost act" href="https://cal.com/your-cal-username/short" data-cal-link="your-cal-username/short" data-cal-config='{"layout":"month_view"}'>Book 45 minutes →</a>
+        </div>
+        <div class="tier">
+          <div class="meta">
+            <p class="name">Focused</p>
+            <p class="desc">Long enough to actually finish, not just make a dent.</p>
+          </div>
+          <div class="price"><b>£150</b> · 65 min</div>
+          <a class="btn ghost act" href="https://cal.com/your-cal-username/focused" data-cal-link="your-cal-username/focused" data-cal-config='{"layout":"month_view"}'>Book 65 minutes →</a>
+        </div>
+        <div class="tier">
+          <div class="meta">
+            <p class="name">Deep</p>
+            <p class="desc">For the big one you've been dodging for a month. Or a few smaller ones, back to back.</p>
+          </div>
+          <div class="price"><b>£200</b> · 95 min</div>
+          <a class="btn ghost act" href="https://cal.com/your-cal-username/deep" data-cal-link="your-cal-username/deep" data-cal-config='{"layout":"month_view"}'>Book 95 minutes →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap row">
+    <div class="col">
+      <p class="eyebrow">from people i've sat with</p>
+      <div class="quotes">
+        <div class="quote">
+          <p>"I'd been sitting on this grant report for three weeks. We sent it in ninety minutes."</p>
+          <cite>Research assistant, AI safety</cite>
+        </div>
+        <div class="quote">
+          <p>"She clocked that I was avoiding the email because I was scared of the answer, not because it was hard to write."</p>
+          <cite>Independent researcher</cite>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <div class="wrap row">
+    <div class="col">
+      <h2>Bring me the thing you've been avoiding.</h2>
+      <p style="margin-bottom:28px;">It's free and takes 25 minutes. You don't need to have it figured out first.</p>
+      <a class="btn" href="https://cal.com/your-cal-username/intro" data-cal-link="your-cal-username/intro" data-cal-config='{"layout":"month_view"}'>Book a free 25-min intro →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <span class="wordmark">do the hard thing <span style="color:var(--ink-soft);font-weight:400;">/ with Ellie</span></span>
+    Accountability coaching for AI safety &amp; EA · <a href="mailto:you@example.com">you@example.com</a> · also listed on the EA Mental Health Navigator
+  </div>
+</footer>
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+  Cal("init", { origin: "https://cal.com" });
+</script>
+
+</body>
+</html>
